@@ -21,7 +21,59 @@ def get_maps_command(mapfiles, web_root):
     for f in mapfiles: # print out filenames which were input
         click.echo('{}'.format(f))
 
+    map_config = {}
+
+    year_lim = input('Do you want to limit by year? (y/n): ')
+    if year_lim == 'y' or year_lim == 'Y' or year_lim == 'yes' or year_lim == 'Yes':
+        year = input('Enter the most recent year of maps you want to include: ')
+        sleep(0.25)
+        click.echo('Limiting to maps from {} and older\n'.format(year))
+        map_config['year_lim'] = True
+        map_config['year'] = year
+    else:
+        map_config['year_lim'] = False
+        map_config['year'] = 'none'
+        click.echo('Not limiting by year\n')
+    sleep(0.5)
+
+    state_lim = input('Do you want to limit by state? (y/n): ')
+    if state_lim == 'y' or state_lim == 'Y' or state_lim == 'yes' or state_lim == 'Yes':
+        state = (input('Enter the 2-letter abbreviations of the states you wish to limit to, separated by commas (ex.: CA,NV,UT): ')).split(',')
+        sleep(0.25)
+        click.echo('Limiting to maps from {}\n'.format(state))
+        map_config['state_lim'] = True
+        map_config['state'] = state
+    else:
+        map_config['state_lim'] = False
+        map_config['state'] = 'none'
+        click.echo('Not limiting by state\n')
+    sleep(0.5)
+
+    if not map_config['state_lim']:
+        bounding_lim = input('Do you want to limit by bounding box? (answering no will likely fill your computer storage) (y/n): ')
+        if bounding_lim == 'y' or bounding_lim == 'Y' or bounding_lim == 'yes' or bounding_lim == 'Yes':
+            click.echo('Enter your bounding box as 4 coordinates separated by commas, in the following order: W Long, S Lat, E Long, N Lat')
+            click.echo('i.e.: -121.794434,37.509726,-111.577148,39.436193')
+            bounding = tuple(input('Bounding box: ').split(','))
+            sleep(0.25)
+            click.echo('Limiting to maps in bounding box {}\n'.format(bounding))
+            map_config['bounding_lim'] = True
+            map_config['bounding'] = bounding
+        else:
+            map_config['bounding_lim'] = False
+            map_config['bounding'] = 'none'
+            click.echo('Not limiting by state\n')
+    else:
+        map_config['bounding_lim'] = False
+        map_config['bounding'] = 'none'
+
+    print(map_config)
+
+    sleep(1)
+
     click.echo('\nCreating maps storage directory\n')
+
+    sleep(1)
 
     if os.path.exists(web_root): # check if entered document root exists
         map_pathname = 'storage/maps'
@@ -69,10 +121,10 @@ def get_maps_command(mapfiles, web_root):
                 for row in reader:
                     if row[0] == 'Series': # exclude the headers
                         continue
-                    else:
-                        if row[54] in map_ids: # check if map is duplicate
-                            continue
-                        else: # download map to storage, add to initialize.csv
+                    elif row[54] in map_ids: # check if map is duplicate
+                        continue
+                    """elif state_lim:
+                        if row[4] in state_lim:
                             map_ids.append(row[54])
                             url = row[58]
                             map_filename = url.split('/')[-1].replace('%20', '_')
@@ -86,6 +138,41 @@ def get_maps_command(mapfiles, web_root):
                                 f.write(map_request.content)
                             row.append(local_download_loc)
                             writer.writerow(row)
+                        else:
+                            click.echo("DOESNT MATCH STATE")
+                            continue
+                    elif year_lim:
+                        if row[6] >= year_lim:
+                            click.echo("NEWER MAP")
+                            continue
+                        else:
+                            map_ids.append(row[54])
+                            url = row[58]
+                            map_filename = url.split('/')[-1].replace('%20', '_')
+                            save_loc = os.path.join(map_dir, map_filename)
+                            local_download_loc = os.path.join(map_pathname, map_filename)
+                            click.echo('====> {}'.format(row[58]))
+                            click.echo('Downloading...')
+                            map_request = requests.get(url)
+                            click.echo('{}\n'.format(map_request))
+                            with open(save_loc, 'wb') as f:
+                                f.write(map_request.content)
+                            row.append(local_download_loc)
+                            writer.writerow(row)"""
+                else: # download map to storage, add to initialize.csv
+                        map_ids.append(row[54])
+                        url = row[58]
+                        map_filename = url.split('/')[-1].replace('%20', '_')
+                        save_loc = os.path.join(map_dir, map_filename)
+                        local_download_loc = os.path.join(map_pathname, map_filename)
+                        click.echo('====> {}'.format(row[58]))
+                        click.echo('Downloading...')
+                        map_request = requests.get(url)
+                        click.echo('{}\n'.format(map_request))
+                        with open(save_loc, 'wb') as f:
+                            f.write(map_request.content)
+                        row.append(local_download_loc)
+                        writer.writerow(row)
 
     click.echo('------- FINALLY COMPLETE -------')
 
