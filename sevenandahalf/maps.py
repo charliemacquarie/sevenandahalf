@@ -130,7 +130,7 @@ def get_maps_command(mapfiles, web_root):
                         url = row[58]
                         map_filename = url.split('/')[-1].replace('%20', '_')
                         save_loc = os.path.join(map_dir, map_filename)
-                        local_download_loc = os.path.join(map_pathname, map_filename)
+                        local_download_loc = os.path.join('/', map_pathname, map_filename)
                         click.echo('====> {}'.format(row[58]))
                         click.echo('Downloading...')
                         map_request = requests.get(url)
