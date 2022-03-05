@@ -62,7 +62,7 @@ def get_maps_command(mapfiles, web_root):
         else:
             map_config['bounding_lim'] = False
             map_config['bounding'] = 'none'
-            click.echo('Not limiting by state\n')
+            click.echo('Not limiting by bounding box\n')
     else:
         map_config['bounding_lim'] = False
         map_config['bounding'] = 'none'
