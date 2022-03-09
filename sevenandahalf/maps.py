@@ -52,12 +52,16 @@ def get_maps_command(mapfiles, web_root):
     if not map_config['state_lim']:
         bounding_lim = input('Do you want to limit by bounding box? (answering no will likely fill your computer storage) (y/n): ')
         if bounding_lim == 'y' or bounding_lim == 'Y' or bounding_lim == 'yes' or bounding_lim == 'Yes':
-            click.echo('Enter your bounding box as 4 coordinates separated by commas, in the following order: S Lat, W Long, N Lat, E Long')
-            click.echo('i.e.: 37.509726,-121.794434,39.436193,-111.577148')
-            bounding = tuple(input('Bounding box: ').split(','))
-            sleep(0.25)
-            click.echo('Limiting to maps in bounding box {}\n'.format(bounding))
+            adding = bounding_lim
+            bounding = []
             map_config['bounding_lim'] = True
+            while adding == 'y' or adding == 'Y' or adding == 'yes' or adding == 'Yes':
+                click.echo('Enter your bounding box as 4 coordinates separated by commas, in the following order: S Lat, W Long, N Lat, E Long')
+                click.echo('i.e.: 37.509726,-121.794434,39.436193,-111.577148')
+                bound_add = tuple(input('Bounding box: ').split(','))
+                click.echo('Added bounding box {}\n'.format(bound_add))
+                bounding.append(bound_add)
+                adding = input('Do you want to add another bounding box? (y/n): ')
             map_config['bounding'] = bounding
         else:
             map_config['bounding_lim'] = False
@@ -115,16 +119,31 @@ def get_maps_command(mapfiles, web_root):
                         continue
                     elif map_config['year_lim'] and row[6] >= map_config['year']: # check if map is newer than cutoff year
                         continue
-                    elif map_config['state_lim'] and row[4] not in map_config['state']: # check if map is in state selected
+                    elif map_config['state_lim'] and row[4] not in map_config['state']: # check if map is outside state selected
                         continue
-                    elif map_config['bounding_lim'] and float(row[45]) <= float(map_config['bounding'][0]): # check if map is in bounding box
-                        continue
-                    elif map_config['bounding_lim'] and float(row[46]) >= float(map_config['bounding'][3]): # check if map is in bounding box
-                        continue
-                    elif map_config['bounding_lim'] and float(row[47]) >= float(map_config['bounding'][2]): # check if map is in bounding box
-                        continue
-                    elif map_config['bounding_lim'] and float(row[48]) <= float(map_config['bounding'][1]): # check if map is in bounding box
-                        continue
+                    elif map_config['bounding_lim']:
+                        for b in map_config['bounding']:
+                            if (float(row[45]) >= float(b[0])
+                                and float(row[46]) <= float(b[3])
+                                and float(row[47]) <= float(b[2])
+                                and float(row[48]) >= float(b[1])
+                                and row[54] not in map_ids):
+                                # map is inside bounding box, download it
+                                map_ids.append(row[54])
+                                url = row[58]
+                                map_filename = url.split('/')[-1].replace('%20', '_')
+                                save_loc = os.path.join(map_dir, map_filename)
+                                local_download_loc = os.path.join('/', map_pathname, map_filename)
+                                click.echo('====> {}'.format(row[58]))
+                                click.echo('Downloading...')
+                                map_request = requests.get(url)
+                                click.echo('{}\n'.format(map_request))
+                                with open(save_loc, 'wb') as f:
+                                    f.write(map_request.content)
+                                row.append(local_download_loc)
+                                writer.writerow(row)
+                            else:
+                                continue
                     else: # download map to storage, add to initialize.csv
                         map_ids.append(row[54])
                         url = row[58]
