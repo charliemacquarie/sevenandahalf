@@ -24,7 +24,7 @@ _where to do this?_
 
 ## Install the app into the virtual environment:
 
-`pip install https://charliemacquarie.com/librarystorage/other/progress/allthemaps/dist/sevenandahalf-1.1.0-py3-none-any.whl`
+`pip install https://charliemacquarie.com/software/sevenandahalf/dist/sevenandahalf-1.1.0-py3-none-any.whl`
 
 _check this will actually work_
 
