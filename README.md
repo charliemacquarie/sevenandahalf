@@ -14,20 +14,24 @@ to note using virtual environment (necessary for a flask app): https://modwsgi.r
 
 ## Create a virtual environment in which to install the app:
 
-`python3 -m venv venv`
-
+```
+python3 -m venv venv
+```
 _where to do this?_
 
 ## Activate the environment you just created:
 
-`source venv/bin/activate`
-
+```
+source venv/bin/activate
+```
 ## Install the app into the virtual environment:
 
-`pip install https://charliemacquarie.com/software/sevenandahalf/dist/sevenandahalf-1.1.0-py3-none-any.whl`
-
+```pip install https://charliemacquarie.com/software/sevenandahalf/dist/sevenandahalf-1.1.0-py3-none-any.whl
+```
 _check this will actually work_
 
 ## Tell the system what/where the flask app is to use the setup processes:
 
-`export FLASK_APP=sevenandahalf`
+```
+export FLASK_APP=sevenandahalf
+```
