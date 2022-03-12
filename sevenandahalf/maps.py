@@ -23,6 +23,17 @@ def get_maps_command(mapfiles, web_root):
 
     map_config = {}
 
+    click.echo('\nYou can either add maps to an existing site/map storage, or you can start from zero\n')
+    map_append = input('Do you want to add to an existing map storage? (y/n): ')
+    if map_append == 'y' or map_append == 'Y' or map_append == 'yes' or map_append == 'Yes':
+        map_config['map_append'] = True
+        map_config['map_append_value'] = 'a'
+        click.echo('Will add to the existing map storage\n')
+    else:
+        map_config['map_append'] = False
+        map_config['map_append_value'] = 'w'
+        click.echo('Will create new map storage and start there\n')
+
     year_lim = input('Do you want to limit by year? (y/n): ')
     if year_lim == 'y' or year_lim == 'Y' or year_lim == 'yes' or year_lim == 'Yes':
         year = input('Enter the most recent year of maps you want to include: ')
@@ -73,7 +84,7 @@ def get_maps_command(mapfiles, web_root):
 
     sleep(1)
 
-    click.echo('\nCreating maps storage directory\n')
+    click.echo('\nChecking map storage directory\n')
 
     sleep(1)
 
@@ -82,23 +93,28 @@ def get_maps_command(mapfiles, web_root):
         map_dir = os.path.join(web_root, map_pathname)
 
         if os.path.exists(map_dir): # check if map storage directory exists
-            click.echo('The maps storage directory exists already')
-            c = input('Enter Y to delete and remake, enter N to stop here and exit: ')
-            if c == 'Y' or c == 'y':
-                click.echo('the directory will be remade\n')
-                rmtree(map_dir) # delete directory if it exists already
-                os.makedirs(map_dir)
+            if map_config['map_append']:
+                click.echo('Using existing map storage directory at: {}\n'.format(map_dir))
             else:
-                click.echo('Exiting now.')
-                sys.exit()
+                click.echo('The maps storage directory exists already')
+                c = input('Are you sure you want to delete the storage and start over? (y/n): ')
+                if c == 'Y' or c == 'y':
+                    click.echo('the directory will be remade\n')
+                    rmtree(map_dir) # delete directory if it exists already
+                    os.makedirs(map_dir)
+                    click.echo('Using map storage directory at: {}\n'.format(map_dir))
+                else:
+                    click.echo('Exiting now.')
+                    sys.exit()
         else:
             os.makedirs(map_dir) # make directory if it doesn't exist already
-        click.echo('Made directory: {}\n'.format(map_dir))
+            click.echo('Using map storage directory at: {}\n'.format(map_dir))
 
     else:
         click.echo('The document root you entered does not exist. Please double check and try again.')
 
 
+    click.echo('**Downloading Maps!**')
     click.echo('Depending on how many maps fit your criteria, this may take a while\n')
 
     sleep(1)
@@ -107,7 +123,7 @@ def get_maps_command(mapfiles, web_root):
 
     init_file_path = os.path.join(current_app.root_path, 'initialize.csv')
 
-    with open(init_file_path, 'w') as init_file: # open initialize.csv file
+    with open(init_file_path, map_config['map_append_value']) as init_file: # open initialize.csv file
         writer = csv.writer(init_file, quoting=csv.QUOTE_ALL)
         for csv_file in mapfiles:
             with open(csv_file, newline='') as csvfile:
