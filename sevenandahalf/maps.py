@@ -10,6 +10,8 @@ import click
 from flask import current_app
 from flask.cli import with_appcontext
 import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 @click.command('get-maps')
 @click.option('--web-root', prompt='Document root for your webserver (full path)', help='full path of your webserver\'s document root')
@@ -119,9 +121,22 @@ def get_maps_command(mapfiles, web_root):
 
     sleep(1)
 
-    map_ids = [] # store ids to check for duplicates
+    # store ids to check for duplicates
+    map_ids = []
 
     init_file_path = os.path.join(current_app.root_path, 'initialize.csv')
+
+    # retry strategy for requests
+    retry_strategy = Retry(
+        total=10,
+        status_forcelist=[429, 500, 502, 503, 504],
+        method_whitelist=['HEAD', 'GET', 'PUT', 'DELETE', 'OPTIONS', 'TRACE', 'POST'],
+        backoff_factor=1
+    )
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+    http = requests.Session()
+    http.mount('https://', adapter)
+    http.mount('http://', adapter)
 
     with open(init_file_path, map_config['map_append_value']) as init_file: # open initialize.csv file
         writer = csv.writer(init_file, quoting=csv.QUOTE_ALL)
@@ -152,7 +167,7 @@ def get_maps_command(mapfiles, web_root):
                                 local_download_loc = os.path.join('/', map_pathname, map_filename)
                                 click.echo('====> {}'.format(row[58]))
                                 click.echo('Downloading...')
-                                map_request = requests.get(url)
+                                map_request = http.get(url)
                                 click.echo('{}\n'.format(map_request))
                                 with open(save_loc, 'wb') as f:
                                     f.write(map_request.content)
@@ -168,7 +183,7 @@ def get_maps_command(mapfiles, web_root):
                         local_download_loc = os.path.join('/', map_pathname, map_filename)
                         click.echo('====> {}'.format(row[58]))
                         click.echo('Downloading...')
-                        map_request = requests.get(url)
+                        map_request = http.get(url)
                         click.echo('{}\n'.format(map_request))
                         with open(save_loc, 'wb') as f:
                             f.write(map_request.content)
