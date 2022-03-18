@@ -36,3 +36,21 @@ _check this will actually work_
 ```
 export FLASK_APP=sevenandahalf
 ```
+
+## Installing Apache2
+More complete details can be found at <https://www.raspberrypi.org/documentation/remote-access/web-server/apache.md>
+```
+sudo apt install apache2 -y
+```
+
+# Setup specific to Trucknet
+(<https://github.com/charliemacquarie/trucknet>)
+At the document root (/var/www/html/), delete the default index.html from Apache2:
+```
+sudo rm -rf index.html
+```
+Still at the document root (/var/www/html/), clone the trucknet repository into place:
+```
+sudo git clone https://github.com/charliemacquarie/trucknet .
+```
+still to do: how to configure apache to allow .htaccess files?
