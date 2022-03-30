@@ -2,9 +2,13 @@
 
 sevenandahalf is a web app that takes your location and shows you the USGS topographic maps that you are located on.
 
-It also includes a script to read a .csv file of maps, specify which ones you want using a year cutoff, a US State list, or a bounding box, download the maps, and initialize the app database with that data to allow you to access the maps.
+sevenandahalf is designed to work on a local network that's not connected to the internet. Specifically, the idea is that you can set this up on something like a Rasberrypi which can manage its own wifi network, and then users can access maps (and other stuff too, if you setup trucknet) using their gps location -- all without needing to rely on the internet (because you're probably somewhere without the internet, right?).
 
-To run, this app requires an apache2 webserver configured to use the WSGI standard. Instructions and tips are included for mod_wsgi. If you are familiar with configuring both of these, you may be able to set up sevenandahalf without the highly-detailed instructions provided below. They're mostly their so that I don't forget every time I have to do it.
+Obviously, this use case also requires that you figure out someway to power the server portably, but you're on your own for that.
+
+sevenandahalf also includes a script to read a .csv file of maps, specify which ones you want using a year cutoff, a US State list, or a bounding box, download the maps, and initialize the app database with that data to allow you to access the maps.
+
+To run, this app requires an apache2 webserver configured to use the WSGI standard. Instructions and tips are included for mod_wsgi. If you are familiar with configuring both of these, you may be able to set up sevenandahalf without the highly-detailed instructions provided below. They're mostly here so that I don't forget every time I have to do it.
 
 _note that the following instructions can, if you pay attention to your own filepaths and configurations, go almost anywhere, but for ease (and to remind myself) I will specify system locations_
 
