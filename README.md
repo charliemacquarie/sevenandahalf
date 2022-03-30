@@ -10,6 +10,7 @@ _note that the following instructions can, if you pay attention to your own file
 
 ## Install Apache2
 More complete details can be found at <https://www.raspberrypi.org/documentation/remote-access/web-server/apache.md>
+bash:
 ```
 sudo apt install apache2-dev -y
 ```
