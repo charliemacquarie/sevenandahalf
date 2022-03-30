@@ -2,3 +2,4 @@ include sevenandahalf/schema.sql
 graft sevenandahalf/static
 graft sevenandahalf/templates
 global-exclude *.pyc
+exclude reminders.txt
