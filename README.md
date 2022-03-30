@@ -16,14 +16,14 @@ sudo apt install apache2-dev -y
 ```
 
 ## Initial setup for the app
-## Create a virtual environment in which to install the app:
-Do this inside /usr/local/www/, creating the www directory if it does not exist already. Note that you may have to `sudo` to perform this command.
+Create a virtual environment in which to install the app. Do this inside /usr/local/www/, creating the www directory if it does not exist already. Note that you may have to `sudo` to perform this command.
+> bash:
 ```
 python3 -m venv venv
 ```
 
-### Make your user the owner of the virtual environment to allow you to perform the later commands
-
+Make your user the owner of the virtual environment to allow you to perform the later commands.
+> bash:
 ```
 sudo chownsudo chown $USER:$USER -R venv/
 ```
