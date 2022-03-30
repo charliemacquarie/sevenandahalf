@@ -27,13 +27,15 @@ Make your user the owner of the virtual environment to allow you to perform the 
 ```
 sudo chownsudo chown $USER:$USER -R venv/
 ```
-## Activate the environment you just created:
 
+Activate the environment you just created.
+> bash:
 ```
 source venv/bin/activate
 ```
-## Install the app into the virtual environment:
 
+Install sevenandahalf into the virtual environment:
+>bash:
 ```
 pip install https://charliemacquarie.com/software/sevenandahalf/dist/sevenandahalf-1.2.0-py3-none-any.whl
 ```
