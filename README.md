@@ -35,7 +35,7 @@ source venv/bin/activate
 ```
 
 Install sevenandahalf into the virtual environment:
->bash:
+> bash:
 ```
 pip install https://charliemacquarie.com/software/sevenandahalf/dist/sevenandahalf-1.2.0-py3-none-any.whl
 ```
@@ -45,31 +45,32 @@ mod_wsgi is very configurable, and complete instructions are found in their docs
 - to install mod_wsgi: https://modwsgi.readthedocs.io/en/master/user-guides/quick-installation-guide.html
 - to configure mod_wsgi: https://modwsgi.readthedocs.io/en/master/user-guides/quick-configuration-guide.html
 - to note using virtual environments with mod_wsgi (necessary for a flask app): https://modwsgi.readthedocs.io/en/master/user-guides/virtual-environments.html
-### download and unpack the source code
-Note that the numbers in the release file may change depending on which release you are seeking.
+Note that you should still have the virtual environment activated while installing and configuring mod_wsgi
+
+Download and unpack the source code. (Note that the numbers in the release file may change depending on which release you are seeking.)
+> bash:
 ```
 wget https://github.com/GrahamDumpleton/mod_wsgi/archive/refs/tags/4.9.0.tar.gz
 tar xvfz 4.9.0.tar.gz
 ```
 
-### Configure the installation
-
-change into the directory for the source code
+Change into the directory for the source code and run the configuration script.
+> bash:
 ```
 cd mod_wsgi-4.9.0/
-```
-run the configuration script
-```
 ./configure
 ```
-### Complete the installation
 
+Perform the installation
+> bash:
 ```
 make
 sudo make install
 ```
-### Activate the module
+
+### Activate mod_wsgi
 You have to create the correct load file in the apache2 configurations, for Rasberrypi this is usually at /etc/apache2/mods-available/. The file should be called wsgi.load, so:
+> bash: 
 ```
 sudo nano /etc/apache2/mods-available/wsgi.load
 ```
