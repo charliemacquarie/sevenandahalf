@@ -1,6 +1,6 @@
 # Seven And A Half
 
-sevenandahalf is a web app that takes your location and shows you the USGS topographic maps that you are located on.
+sevenandahalf is a web app that uses your location to show you the USGS topographic maps covering where you are. It is built using [Flask](https://flask.palletsprojects.com/en/2.1.x/)
 
 sevenandahalf is designed to work on a local network that's not connected to the internet. Specifically, the idea is that you can set this up on something like a Rasberrypi which can manage its own wifi network, and then users can access maps (and other stuff too, if you setup trucknet) using their gps location -- all without needing to rely on the internet (because you're probably somewhere without the internet, right?).
 
@@ -131,7 +131,7 @@ _note that there is a complete sample default-ssl.conf text at the bottom of thi
 systemctl restart apache2
 ```
 
-*NOTE* as may be clear, this site uses a self-signed ssl certificate, which will throw the user a huge giant security warning that they'll have to click around the first time they access the site. There is no way around this, because sevenandahalf is designed to work on a local network that's not connected to the internet, so signed certificates will never work because there may not be an internet connection by which to verify them. It's probably a problem to encourage the user to click around such a warning, but whatever, this app has a highly specific group of people who will ever use it. You can explain to them the deal.
+**NOTE** as may be clear, this site uses a self-signed ssl certificate, which will throw the user a huge giant security warning that they'll have to click around the first time they access the site. There is no way around this, because sevenandahalf is designed to work on a local network that's not connected to the internet, so signed certificates will never work because there may not be an internet connection by which to verify them. It's probably a problem to encourage the user to click around such a warning, but whatever, this app has a highly specific group of people who will ever use it. You can explain to them the deal.
 
 ### Configure the site to use mod_wsgi and the wsgi script
 Your default site configuration needs to be edited to add the Alias for the wsgi script (where the app will be imported) and give apache access to read the files in this location. You may also want to enable DaemonProcess mode which allows changes to the source code to take effect without restarting the server. More on this can be found in the [mod_wsgi documentation](https://modwsgi.readthedocs.io/en/master/user-guides/quick-configuration-guide.html#delegation-to-daemon-process).
