@@ -218,6 +218,10 @@ flask init-db
 
 Your site should now be ready to visit! https://192.168.1.153 in a browser on my network, yours may vary.
 
+### Setup the secret key in the config file
+
+Follow directions at (https://flask.palletsprojects.com/en/2.1.x/tutorial/deploy/#configure-the-secret-key)
+
 ## Full examples of configs
 ### default-ssl.conf
 Example of entire contents of config file:
