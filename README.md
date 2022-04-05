@@ -46,7 +46,7 @@ source venv/bin/activate
 Install sevenandahalf into the virtual environment:
 > bash:
 ```
-pip install https://charliemacquarie.com/software/sevenandahalf/dist/sevenandahalf-1.2.0-py3-none-any.whl
+pip install https://charliemacquarie.com/software/sevenandahalf/dist/sevenandahalf-1.2.1-py3-none-any.whl
 ```
 
 ## Install and configure mod_wsgi
