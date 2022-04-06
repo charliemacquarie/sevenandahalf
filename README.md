@@ -34,7 +34,7 @@ python3 -m venv venv
 Make your user the owner of the virtual environment to allow you to perform the later commands.
 > bash:
 ```
-sudo chownsudo chown $USER:$USER -R venv/
+sudo chown $USER:$USER -R venv/
 ```
 
 Activate the environment you just created.
